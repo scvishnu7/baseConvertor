@@ -27,15 +27,6 @@ public class Convertor extends JFrame implements ActionListener,DocumentListener
 	int curOffset;
 public Convertor(){
 	//write code to initialize the frame.
-	tfDec = new JTextField(17);
-	tfBin = new JTextField(17);
-	tfOct = new JTextField(17);
-	tfHex = new JTextField(17);
-	
-	strBin=strOct=strDec=strHex="";
-	curOffset=0;
-	chgByUser = true;
-	btnClear = new JButton("Clear");
 	setLayout(new GridLayout(5,1));
 	setSize(290,250);
 	setMinimumSize(new Dimension(290,250));
@@ -43,29 +34,51 @@ public Convertor(){
 	setTitle("Base Convertor");
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
+	
+	tfDec = new JTextField(17);
+	tfDec.getDocument().addDocumentListener(this);
+	tfDec.getDocument().putProperty("name", "Decimal");
+	
+	
+	tfBin = new JTextField(17);
+	tfBin.getDocument().addDocumentListener(this);
+	tfBin.getDocument().putProperty("name", "Binary");
+	
+	tfOct = new JTextField(17);
+	tfOct.getDocument().addDocumentListener(this);
+	tfOct.getDocument().putProperty("name", "Octal");
+
+	tfHex = new JTextField(17);
+	tfHex.getDocument().addDocumentListener(this);
+	tfHex.getDocument().putProperty("name", "Hex");
+
+	strBin=strOct=strDec=strHex="";
+	curOffset=0;
+	chgByUser = true;
+	btnClear = new JButton("Clear");
+	btnClear.addActionListener(this);
+	
 	JPanel row1 = new JPanel();
-	row1.add(new JLabel("Binary  :"));row1.add(tfBin);
-	add(row1);
+	row1.add(new JLabel("Binary  :"));
+	row1.add(tfBin);
+	
 	JPanel row2 = new JPanel();
-	row2.add(new JLabel("Decimal :"));row2.add(tfDec);
-	add(row2);
+	row2.add(new JLabel("Decimal :"));
+	row2.add(tfDec);
+	
 	JPanel row3 = new JPanel();
-	row3.add(new JLabel("Octal     :"));row3.add(tfOct);
-	add(row3);
+	row3.add(new JLabel("Octal     :"));
+	row3.add(tfOct);
+	
 	JPanel row4 = new JPanel();
-	row4.add(new JLabel("Hex       :"));row4.add(tfHex);
+	row4.add(new JLabel("Hex       :"));
+	row4.add(tfHex);
+	
+	add(row1);
+	add(row2);
+	add(row3);
 	add(row4);
 	add(btnClear);
-	
-	tfBin.getDocument().addDocumentListener(this);
-	tfDec.getDocument().addDocumentListener(this);
-	tfOct.getDocument().addDocumentListener(this);
-	tfHex.getDocument().addDocumentListener(this);
-	tfBin.getDocument().putProperty("name", "Binary");
-	tfDec.getDocument().putProperty("name", "Decimal");
-	tfOct.getDocument().putProperty("name", "Octal");
-	tfHex.getDocument().putProperty("name", "Hex");
-	btnClear.addActionListener(this);
 	
 	setVisible(true);
 }
@@ -77,7 +90,11 @@ public static void main(String[] args) {
 
 @Override
 public void actionPerformed(ActionEvent arg0) {
-	System.out.println(arg0.getSource().toString());
+	tfBin.setText("");
+	tfHex.setText("");
+	tfDec.setText("");
+	tfOct.setText("");
+	strBin=strOct=strDec=strHex="";
 }
 
 @Override
@@ -100,9 +117,8 @@ public void detect(DocumentEvent e){
 	Document doc =  e.getDocument();
 	String nameProp = doc.getProperty("name").toString();
 	curOffset=e.getOffset();
-	if(nameProp.compareTo("Binary")==0){
+	if(nameProp.compareTo("Binary")==0)
 		convertMe("bin",tfBin.getText().toString());
-		}
 	else if(nameProp.compareTo("Decimal")==0)
 		convertMe("deci",tfDec.getText().toString());
 	else if(nameProp.compareTo("Octal")==0)
